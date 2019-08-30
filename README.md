@@ -1,20 +1,24 @@
 README
 ==============================================================================
-pre-requisites
+Pre-requisites
 
-1. Download WSO2 Micro-gateway from     for installation.
-2. Download WSO2 Micro-gateway toolkit from  and follow    for installation.
-3. Install ballerina from   . For this demo ballerina - 0.991.0 version is used.
+1.Download WSO2 Micro-gateway toolkit from https://wso2.com/api-management/api-microgateway/  and follow https://docs.wso2.com/display/MG301/Installation+Prerequisites#InstallationPrerequisites-MicrogatewayToolkit for installation.
+
+2. Download WSO2 Micro-gateway runtime from https://wso2.com/api-management/api-microgateway/  and follow https://docs.wso2.com/display/MG301/Installation+Prerequisites#InstallationPrerequisites-MicrogatewayRuntime for installation.
+
+3. Download ballerina from https://ballerina.io/downloads/ and follow https://ballerina.io/learn/getting-started/#installing-ballerina for installtion . For this demo ballerina - 0.991.0 version is used.
+
 4. Create a private docker registry if you want to push the docker image in ops process.(optional)
+
 5. Install Docker, Kubernetes and kubectl.
 
 Deploying micro-services in Kubernetes
 
-1. After installing ballerina, run following commands for each service to build and create kubernetes resources. You can find the two ballerina services () in micro-services folder. 
+1. After installing ballerina, run following commands for each service to build and create kubernetes resources. You can find the two ballerina services (books_get_service.bal and books_search_service.bal ) in APIDemoProject/micro-services folder. 
 
 ballerina build books_get_service.bal
 
-This command would create the relevant kubernetes resources and push the docker image to your specified docker registry. Once this command is executed, it would provide you a link to the kubernetes resources as below. Copy that command and run it.
+This command would create the relevant kubernetes resources and push the docker image to your specified docker registry. Once above build command is executed, it would provide you with a link to deploy the kubernetes resources as below. Copy that command and run it.
 
 
 Similarly, execute the same commands for books_search_service.bal
@@ -27,12 +31,19 @@ kubectl get svc
 Updating API-definitions (swagger file) with Open-API vendor extension values
 
   Under api-definitions folder, you can find  ' booklistAPI.yaml' which contains an OpenAPI 3 - swagger definition with book-list resource defined. Please update the endpoint url with your IP and port accordingly. 
+  x-wso2-endpoints:
+ - bookList:
+    urls:
+    - http://IP:PORT
 
-3.Try out developer workflow 
-  3.1 Create a micro-gateway project called bookstore with following command. This would create a project structure as below.
+3.Try out the developer workflow 
+  3.1 Create a micro-gateway project called bookstore with following command.
 
   micro-gw init bookstore 
 
+ This would create a project structure as below.
+
+bookstore
   ├── api_definitions
 ├── conf
 │   └── deployment-config.toml
@@ -56,9 +67,11 @@ Updating API-definitions (swagger file) with Open-API vendor extension values
 
       micro-gw build  bookstore
 
- 3.3 Mount the created API to WSO2 micro-gw docker image and expose the API by running below command. If you need to use the micro-gw binary please follow [1] to understand the flow. Replace project_target_path with your bookstore/target folder.
+ 3.3 Mount the created API to WSO2 micro-gw docker image and expose the API by running below command. Replace project_target_path with your bookstore/target folder. 
  
  docker run -d -v <project_target_path>:/home/exec/ -p 9095:9095 -p 9090:9090 -e project="bookstore"  wso2/wso2micro-gw:3.0.1
+
+ Instead if  you need to use the micro-gw binary please follow https://docs.wso2.com/display/MG301/Quick+Start+Guide+-+Binary to understand the flow.
 
  If you execute a docker ps command, you can find a micro-gw runtime running.
 
@@ -117,6 +130,4 @@ Sample command
 curl -X GET "https://IP:NODE_PORT/bookstore/v1/books/list" -k -H "Authorization:Bearer $TOKEN"
 
 In a potential CD process you can auto push the docker image to a docker registry.You can enhance this dev-ops flow by creating separate deployment.toml files for each environment such as test,staging,production etc. 
-
-
 
