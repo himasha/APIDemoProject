@@ -1,0 +1,27 @@
+[kubernetes]
+  [kubernetes.kubernetesDeployment]
+    enable = true
+    replicas = '2'
+    imagePullPolicy = 'Always'
+    baseImage = 'wso2/wso2micro-gw:3.0.1'
+    image = 'IMAGE_NAME'
+    buildImage = true
+    push = false
+    [kubernetes.kubernetesConfigMap]
+    enable = true
+    ballerinaConf = 'PATH_TO_MGW/conf/micro-gw.conf'
+    #[[kubernetes.kubernetesConfigMap.configMaps]]
+    #    name = ''
+    #    mountPath = ''
+    #    readOnly = false
+    #    data = ['']
+  [kubernetes.kubernetesService]
+    enable = true
+    #name = 'bookstore_service'
+    #labels = ''
+    serviceType = 'NodePort'
+    #port = ''
+
+
+
+
