@@ -140,6 +140,8 @@ ballerinaConf = 'PATH_TO_MGW_RUNTIME/conf/micro-gw.conf'
 `micro-gw build bookstore/ -d bookstore/conf/dev/dep.toml`
 
 4.6 This would provide you a link to deploy your kubernetes resources. Please run that command.
+Sample command
+`kubectl apply -f /Users/himasha/Documents/bookstore/target/kubernetes/bookstore`
 
 4.7 Do a kubectl 'get svc' command and get the relevant node ports and you can try invoking the resources in kubernetes. 
 
