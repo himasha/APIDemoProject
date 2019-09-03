@@ -18,7 +18,10 @@ README
 
 `ballerina build books_get_service.bal`
 
-This command would create the relevant kubernetes resources and push the docker image to your specified docker registry. Once above build command is executed, it would provide you with a link to deploy the kubernetes resources as below. Copy that command and run it.This would deploy the artifacts in kubernetes.
+This command would create the relevant kubernetes resources and push the docker image to your specified docker registry. Once above build command is executed, it would provide you with a link to deploy the kubernetes resources as below.
+
+kubectl apply -f RESOURCE PATH
+Copy that command and run it.This would deploy the artifacts in kubernetes.
 
 
 Similarly, execute the same commands for books_search_service.bal
