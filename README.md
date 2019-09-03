@@ -6,7 +6,7 @@ README
 
 2. Download WSO2 Micro-gateway runtime from https://wso2.com/api-management/api-microgateway/  and follow https://docs.wso2.com/display/MG301/Installation+Prerequisites#InstallationPrerequisites-MicrogatewayRuntime for installation.
 
-3. Download ballerina from https://ballerina.io/downloads/ and follow https://ballerina.io/learn/getting-started/#installing-ballerina for installtion . For this demo ballerina - 0.991.0 version is used.
+3. Download ballerina from https://ballerina.io/downloads/ and follow https://ballerina.io/learn/getting-started/#installing-ballerina for installation . For this demo ballerina - 0.991.0 version is used.
 
 4. Create a private docker registry if you want to push the docker image in ops process.(optional)
 
@@ -14,11 +14,11 @@ README
 
 ## Deploying micro-services in Kubernetes
 
-1. After installing ballerina, run following commands for each service to build and create kubernetes resources. You can find the two ballerina services (books_get_service.bal and books_search_service.bal ) in APIDemoProject/micro-services folder. 
+1. After installing ballerina, run following commands for each service to build and create kubernetes resources. You can find the two ballerina services (books_get_service.bal and books_search_service.bal ) in APIDemoProject/micro-services folder. Make sure to update the docker username/password in these files to suit your docker registry.
 
 `ballerina build books_get_service.bal`
 
-This command would create the relevant kubernetes resources and push the docker image to your specified docker registry. Once above build command is executed, it would provide you with a link to deploy the kubernetes resources as below. Copy that command and run it.
+This command would create the relevant kubernetes resources and push the docker image to your specified docker registry. Once above build command is executed, it would provide you with a link to deploy the kubernetes resources as below. Copy that command and run it.This would deploy the artifacts in kubernetes.
 
 
 Similarly, execute the same commands for books_search_service.bal
@@ -30,14 +30,15 @@ Similarly, execute the same commands for books_search_service.bal
 
 ## Updating API-definitions (swagger file) with Open-API vendor extension values
 
-  Under api-definitions folder, you can find  ' booklistAPI.yaml' which contains an OpenAPI 3 - swagger definition with book-list resource defined. Please update the endpoint url with your IP and port accordingly. 
+  Under api-definitions folder, you can find  ' booklistAPI.yaml' which contains an OpenAPI 3 - swagger definition with book-list resource defined. Please update the endpoint url with your IP and port accordingly,pointing to the kubernetes deployed microservices from previous step.
+  
   x-wso2-endpoints:
  - bookList:
     urls:
     - http://IP:PORT
 
 # 3.Try out the developer workflow 
-  3.1 Create a micro-gateway project called bookstore with following command.
+  3.1 Create a micro-gateway project called bookstore with the following command.
 
   `micro-gw init bookstore` 
 
