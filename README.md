@@ -114,15 +114,15 @@ bookstore
 
 `docker stop CONTAINER_ID`
 
-`docker remove CONTAINER_ID`
+`docker rm CONTAINER_ID`
 
 3.8 Mount the new API artifacts to micro-gw runtime docker image and run it.
 `docker run -d -v <project_target_path>:/home/exec/ -p 9095:9095 -p 9090:9090 -e project="bookstore"  wso2/wso2micro-gw:3.0.1`
 
-3.9 Now you can test it as below.
+3.9 Now you can test it as below.Following is a sample request.
 `curl -X GET "https://IP:9095/bookstore/v1/books/search/Java" -k -H "Authorization:Bearer $TOKEN"`
 
-Use below command to  get the customer response from the  response interceptor.
+Use below command to  get the customer response from the  response interceptor.This should provide with the custom message "empty response from server received".
 `curl -X GET "https://IP:9095/bookstore/v1/books/search/123" -k -H "Authorization:Bearer $TOKEN"`
 
 In a potential CI process you could push this project to a source repository such as git and integrate a cotinuous build with CI server such as Jenkins.
@@ -133,7 +133,7 @@ In a potential CI process you could push this project to a source repository suc
 
 4.2. Create a new directory called 'dev' inside bookstore/conf folder of your project.
 
-4.3 Copy dep.toml file from git project's deployment-configs folder and add it to bookstore/conf/dev folder. 
+4.3 Copy dep.toml file from git project's deployment-configs folder and add it to bookstore/conf/dev folder.  This deployment.toml file would create a docker image (where micro-gw runtime as base image) based on the .balx (of your API artifacts that will be build) and push it to a private docker registry.
 
 4.4. Make sure to set appropriate values to below properties in your dep.toml file.
 image = 'IMAGE_NAME'
@@ -152,5 +152,5 @@ Sample command
 Sample command
 `curl -X GET "https://IP:NODE_PORT/bookstore/v1/books/list" -k -H "Authorization:Bearer $TOKEN"`
 
-In a potential CD process you can auto push the docker image to a docker registry.You can enhance this dev-ops flow by creating separate deployment.toml files for each environment such as test,staging,production etc. 
+In a potential CD process you can auto push the docker image to a docker registry.You can enhance this dev-ops flow by creating separate deployment.toml files for each environment such as test,staging,production etc. For rest of the deployment configs of your environments, you can directly pull the image from dev environment and push it to the relevant environment.
 
