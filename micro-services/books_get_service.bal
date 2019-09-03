@@ -9,7 +9,7 @@ import ballerinax/kubernetes;
 @kubernetes:Deployment {
     
     name:"books-list-deployment",
-    image:"himasha91/mgrepo:1.0.0",
+    image:"DOCKER REGISTRY USERNAME/REPONAME:TAG",
     imagePullPolicy:"Always",
     buildImage:true,
     push:true,
@@ -20,7 +20,7 @@ import ballerinax/kubernetes;
 @http:ServiceConfig {
     basePath: "/books"
 }
-service helloWorld on new http:Listener(9090) {
+service bookListService on new http:Listener(9090) {
     resource function list(http:Caller outboundEP, http:Request request) {
         http:Response response = new;
         json books = {
