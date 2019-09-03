@@ -10,7 +10,7 @@ import ballerinax/kubernetes;
 @kubernetes:Deployment {
     
     name:"books-search-deployment",
-    image:"himasha91/mgreposearch:1.0.0",
+    image:"DOCKER REGISTRY USERNAME/REPONAME:TAG",
     imagePullPolicy:"Always",
     buildImage:true,
     push:true,
@@ -21,7 +21,7 @@ import ballerinax/kubernetes;
 @http:ServiceConfig {
     basePath: "/books"
 }
-service helloWorld on new http:Listener(9090) {
+service bookSearchService on new http:Listener(9090) {
     @http:ResourceConfig {
         methods:["GET"],
         path:"/search/{query}"
