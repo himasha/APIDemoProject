@@ -8,13 +8,13 @@ README
 
 3. Download ballerina from https://ballerina.io/downloads/ and follow https://ballerina.io/learn/getting-started/#installing-ballerina for installation . For this demo ballerina - 0.991.0 version is used.
 
-4. Create a private docker registry if you want to push the docker image in ops process.(optional)
+4. Create a private docker registry in docker hub, if you want to push the docker image in ops process.(optional)
 
 5. Install Docker, Kubernetes and kubectl.
 
 ## Deploying micro-services in Kubernetes
 
-1. After installing ballerina, run following commands for each service to build and create kubernetes resources. You can find the two ballerina services (books_get_service.bal and books_search_service.bal ) in APIDemoProject/micro-services folder. Make sure to update the docker username/password in these files to suit your docker registry.
+1. After installing ballerina, run following commands for each service to build and create kubernetes resources. You can find the two ballerina services (books_get_service.bal and books_search_service.bal ) in APIDemoProject/micro-services folder. Make sure to update the docker username/password in these files to suit your docker registry created in docker hub.
 
 `ballerina build books_get_service.bal`
 
