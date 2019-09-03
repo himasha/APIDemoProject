@@ -139,7 +139,7 @@ In a potential CI process you could push this project to a source repository suc
 image = 'IMAGE_NAME'
 ballerinaConf = 'PATH_TO_MGW_RUNTIME/conf/micro-gw.conf'
 
-4.5 Now you can build the bookstore project by pointing to the new deployment config file , which would create your kubernetes resources. 
+4.5 Now you can build the bookstore project by pointing to the new deployment config file , which would create your docker image for bookstore and kubernetes resources. 
 
 `micro-gw build bookstore/ -d bookstore/conf/dev/dep.toml`
 
