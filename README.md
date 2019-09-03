@@ -88,7 +88,7 @@ bookstore
 
       micro-gw build  bookstore
 
- 3.3 Mount the created API to WSO2 micro-gw docker image and expose the API by running below command. Replace project_target_path with your bookstore/target folder. 
+ 3.3 Executable .balx file created in step 3.3 contains the API artifact that we created through the swagger defition. In order to expose this API, we need to provide it as input for the micro-gw runtime. Since I'm using the micro-gw docker image in this demo(instead of the binary), we need to mount this .balx file to WSO2 micro-gw docker image and expose the API by running below command. Replace project_target_path with your bookstore/target folder. 
  
  `docker run -d -v <project_target_path>:/home/exec/ -p 9095:9095 -p 9090:9090 -e project="bookstore"  wso2/wso2micro-gw:3.0.1`
 
