@@ -4,7 +4,7 @@ README
 
 1.Download WSO2 Micro-gateway toolkit from https://wso2.com/api-management/api-microgateway/  and follow https://docs.wso2.com/display/MG301/Installation+Prerequisites#InstallationPrerequisites-MicrogatewayToolkit for installation.
 
-2. Download WSO2 Micro-gateway runtime from https://wso2.com/api-management/api-microgateway/  and follow https://docs.wso2.com/display/MG301/Installation+Prerequisites#InstallationPrerequisites-MicrogatewayRuntime for installation.
+2. Download WSO2 Micro-gateway runtime from https://wso2.com/api-management/api-microgateway/  and follow https://docs.wso2.com/display/MG301/Installation+Prerequisites#InstallationPrerequisites-MicrogatewayRuntime for installation. For this demo, micro-gw runtime docker image will be used.
 
 3. Download ballerina from https://ballerina.io/downloads/ and follow https://ballerina.io/learn/getting-started/#installing-ballerina for installation . For this demo ballerina - 0.991.0 version is used.
 
@@ -41,7 +41,9 @@ Similarly, execute the same commands for books_search_service.bal
     - http://IP:PORT
 
 # 3.Try out the developer workflow 
-  3.1 Create a micro-gateway project called bookstore with the following command.
+We will be using the micro-gw toolkit to create a micro-gw project and build the API artifacts that we are going to expose. If you have followed the installation instructions for the toolkit you should be able to run these commands from anywhere.
+
+  3.1 Go to a preferred folder of yours and create a micro-gateway project called bookstore with the following command.
 
   `micro-gw init bookstore` 
 
@@ -81,14 +83,14 @@ bookstore
 
     └── gen
     
-
-  3.2  Copy the updated swagger definition from  step 3 to your newly created micro-gw project bookstore/api-definitions folder.
+  # Adding book-list resource to the API 
+  3.2  Copy the updated swagger definition from  step 3 (booklistAPI.yaml) to your newly created micro-gw project bookstore/api-definitions folder.This contains the bookstore API defition along with book-list resource defined. 
 
   3.3 Run below command to build the artifacts to expose your API. This would create an executable (.balx) file which you can use as input to the micro-gw runtime. 
 
       micro-gw build  bookstore
 
- 3.3 Executable .balx file created in step 3.3 contains the API artifact that we created through the swagger defition. In order to expose this API, we need to provide it as input for the micro-gw runtime. Since I'm using the micro-gw docker image in this demo(instead of the binary), we need to mount this .balx file to WSO2 micro-gw docker image and expose the API by running below command. Replace project_target_path with your bookstore/target folder. 
+ 3.3 Executable .balx file created in step 3.3 contains the API artifact that we created through the swagger defition. In order to expose this API, we need to provide it as input for the micro-gw runtime. Since I'm using the micro-gw docker image in this demo(instead of the binary), we need to mount this .balx file to WSO2 micro-gw docker image and expose the API by running below command. Replace project_target_path with your bookstore/target folder. Micro-gw runtime docker image will be running the files located in home/exec so make sure to keep the host directory as /home/exec.Micro-gw runtime will be exposing 9090 as the HTTP port and 9095 as the HTTPS port.
  
  `docker run -d -v <project_target_path>:/home/exec/ -p 9095:9095 -p 9090:9090 -e project="bookstore"  wso2/wso2micro-gw:3.0.1`
 
@@ -103,6 +105,8 @@ bookstore
 3.4 Test the API locally with below command. 
 
 `curl -X GET "https://IP:9095/bookstore/v1/books/list" -k -H "Authorization:Bearer $TOKEN"`
+
+# Adding book-search resource to the API
 
 3.5 Similarly, you could add the second resource 'book_search' where we will add a response interceptor to send a custom response back. Update the swagger definition you copied to bookstore/api-definitions with the content of git repository api-definitions/'fullbooklist.yaml'.
 
@@ -122,7 +126,7 @@ bookstore
 3.9 Now you can test it as below.Following is a sample request.
 `curl -X GET "https://IP:9095/bookstore/v1/books/search/Java" -k -H "Authorization:Bearer $TOKEN"`
 
-Use below command to  get the customer response from the  response interceptor.This should provide with the custom message "empty response from server received".
+Use below command to  get the custom response from the  response interceptor.This should provide with the custom message "empty response from server received".
 `curl -X GET "https://IP:9095/bookstore/v1/books/search/123" -k -H "Authorization:Bearer $TOKEN"`
 
 In a potential CI process you could push this project to a source repository such as git and integrate a cotinuous build with CI server such as Jenkins.
@@ -133,7 +137,7 @@ In a potential CI process you could push this project to a source repository suc
 
 4.2. Create a new directory called 'dev' inside bookstore/conf folder of your project.
 
-4.3 Copy dep.toml file from git project's deployment-configs folder and add it to bookstore/conf/dev folder.  This deployment.toml file would create a docker image (where micro-gw runtime as base image) based on the .balx (of your API artifacts that will be build) and push it to a private docker registry.
+4.3 Copy dep.toml file from git project's deployment-configs folder and add it to bookstore/conf/dev folder. This is a deployment config file which explains the type of deployment you need ,so that at build time micro-gw toolkit will build the suitable resources for your deployment. in dep.toml we are configuring a kubernetes deployment and a docker image (of built API artifact + micro-gw base image).
 
 4.4. Make sure to set appropriate values to below properties in your dep.toml file.
 image = 'IMAGE_NAME'
@@ -152,5 +156,5 @@ Sample command
 Sample command
 `curl -X GET "https://IP:NODE_PORT/bookstore/v1/books/list" -k -H "Authorization:Bearer $TOKEN"`
 
-In a potential CD process you can auto push the docker image to a docker registry.You can enhance this dev-ops flow by creating separate deployment.toml files for each environment such as test,staging,production etc. For rest of the deployment configs of your environments, you can directly pull the image from dev environment and push it to the relevant environment.
+In a potential CD process you can auto push the docker image to a docker registry.You can enhance this dev-ops flow by creating separate deployment.toml files for each environment such as test,staging,production etc. For rest of the deployment configs of your environments, when you define the deployment.toml file, you can directly pull the image from dev environment(docker registry) and push it to the relevant environment (staging,test,prod etc).
 
